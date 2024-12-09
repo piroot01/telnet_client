@@ -64,7 +64,9 @@ std::int32_t main()
     const std::string server_address = "10.22.49.160";
     const std::int16_t server_port = 23;
     const std::string password = "moxa";
+
     const std::chrono::milliseconds delay_after_connect(100);
+    const std::chrono::milliseconds delay_after_send(50);
 
     std::int32_t sockfd;
 
@@ -83,11 +85,20 @@ std::int32_t main()
     // send the password
     send_data(sockfd, password);
 
+    // slight delay, telnet is slow
+    std::this_thread::sleep_for(delay_after_connect);
+
     // choose to restart the server
     send_data(sockfd, "s");
 
+    // slight delay, telnet is slow
+    std::this_thread::sleep_for(delay_after_connect);
+
     // confirm the restart
     send_data(sockfd, "y");
+
+    // slight delay, telnet is slow
+    std::this_thread::sleep_for(delay_after_connect);
 
     // clean the response junk
     while (!receive_data(sockfd).empty());
